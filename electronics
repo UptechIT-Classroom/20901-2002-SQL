@@ -1,0 +1,61 @@
+-- เปิดการใช้งาน Foreign Key Constraints (สำคัญมากสำหรับ SQLite)
+PRAGMA foreign_keys = ON;
+
+-- ลบตารางเก่าทิ้งถ้ามีอยู่แล้ว เพื่อให้สามารถรันสคริปต์ซ้ำได้โดยไม่เกิดข้อผิดพลาด
+-- ต้องลบตารางลูก (Songs) ก่อนตารางแม่ (Artists)
+DROP TABLE IF EXISTS Songs;
+DROP TABLE IF EXISTS Artists;
+
+-- =================================================================
+-- ตารางที่ 1: ตารางศิลปิน (Artists) - ตารางหลัก (Parent Table)
+-- =================================================================
+CREATE TABLE Artists (
+    ArtistID      INTEGER PRIMARY KEY AUTOINCREMENT, -- Key หลักสำหรับระบุศิลปินแต่ละคน (ไม่ซ้ำกัน)
+    ArtistName    TEXT NOT NULL,                     -- ชื่อศิลปิน
+    Genre         TEXT,                              -- แนวเพลง เช่น Pop, Rock, Indie
+    Country       TEXT,                              -- ประเทศ
+    DebutYear     INTEGER                            -- ปีที่เดบิวต์
+);
+
+-- =================================================================
+-- ตารางที่ 2: ตารางเพลง (Songs) - ตารางรอง (Child Table)
+-- =================================================================
+CREATE TABLE Songs (
+    SongID          INTEGER PRIMARY KEY AUTOINCREMENT, -- Key หลักสำหรับระบุเพลงแต่ละเพลง
+    Title           TEXT NOT NULL,                     -- ชื่อเพลง
+    Album           TEXT,                              -- ชื่ออัลบั้ม
+    ReleaseYear     INTEGER,                           -- ปีที่ปล่อยเพลง
+    DurationSeconds INTEGER,                           -- ความยาวเพลง (วินาที)
+    ArtistID        INTEGER,                           -- Foreign Key ที่ใช้อ้างอิงไปยังตาราง Artists
+    
+    -- กำหนดความสัมพันธ์ (Relationship)
+    -- โดยระบุว่าคอลัมน์ ArtistID ในตารางนี้ จะเชื่อมโยงไปยังคอลัมน์ ArtistID ของตาราง Artists
+    FOREIGN KEY (ArtistID) REFERENCES Artists(ArtistID)
+);
+
+-- =================================================================
+-- เพิ่มข้อมูลตัวอย่าง (Sample Data) - ฉบับศิลปินไทย
+-- =================================================================
+
+-- เพิ่มข้อมูลในตาราง Artists
+INSERT INTO Artists (ArtistName, Genre, Country, DebutYear) VALUES
+('Three Man Down', 'Pop Rock', 'Thailand', 2013),
+('Tilly Birds', 'Alternative Rock', 'Thailand', 2014),
+('Paper Planes', 'Rock', 'Thailand', 2017),
+('BOWKYLION', 'Pop', 'Thailand', 2017),
+('Nont Tanont', 'Pop', 'Thailand', 2012);
+
+-- เพิ่มข้อมูลในตาราง Songs (สังเกตว่า ArtistID จะตรงกับ ID ของศิลปินในตาราง Artists)
+INSERT INTO Songs (Title, Album, ReleaseYear, DurationSeconds, ArtistID) VALUES
+('ฝนตกไหม', 'This City Won’t Be Lonely Anymore', 2019, 248, 1),
+('ถ้าเธอรักฉันจริง', 'This City Won’t Be Lonely Anymore', 2020, 274, 1),
+('ไปเถอะเธอ', 'This City Won’t Be Lonely Anymore', 2021, 230, 1),
+('คิด(แต่ไม่)ถึง', 'It''s Gonna Be OK', 2020, 288, 2),
+('เพื่อนเล่น ไม่เล่นเพื่อน', 'It''s Gonna Be OK', 2021, 243, 2),
+('ถ้าเราเจอกันอีก (Until Then)', 'It''s Gonna Be OK', 2021, 289, 2),
+('ทรงอย่างแบด (Bad Boy)', 'Single', 2022, 222, 3),
+('เสแสร้ง (Pretend)', 'Single', 2022, 252, 3),
+('ลงใจ', 'Lionheart', 2019, 259, 4),
+('วาดไว้', 'Single', 2022, 246, 4),
+('โต๊ะริม (Melt)', 'Cigarette Candy & Vanilla Sky', 2022, 219, 5),
+('มีผลต่อหัวใจ', 'Single', 2017, 243, 5);
