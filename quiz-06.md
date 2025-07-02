@@ -15,6 +15,14 @@
     9. (OR) จงเขียนคำสั่งเพื่อแสดงข้อมูลโครงการทั้งหมดที่มีสถานะเป็น 'Completed' หรือ เริ่มโครงการ (`StartDate`) ก่อนวันที่ '2025-01-01'
     10. (Challenge) จงเขียนคำสั่งเพื่อแสดงข้อมูลสมาชิกทั้งหมดที่เป็น 'Beginner' หรือ 'Intermediate' และ มี `MemberID` มากกว่า 2 (คำใบ้: ใช้วงเล็บ `()` เพื่อจัดกลุ่มเงื่อนไข `OR`)
 
-
+###เฉลย
 1. SELECT * FROM ClubMembers
+2. SELECT FullName, SkillLevel FROM ClubMembers;
+3. SELECT ProjectID, ProjectName, Status FROM Projects;
+4. SELECT * FROM ClubMembers WHERE MemberID = 5;
 5. SELECT FullName, Email, SkillLevel FROM ClubMembers WHERE SkillLevel = 'Beginner'
+6. SELECT * FROM Projects WHERE Status = 'Planning';
+7. SELECT * FROM ClubMembers WHERE SkillLevel != 'Expert';
+8. SELECT * FROM ClubMembers WHERE SkillLevel = 'Intermediate' AND JoinDate = '2025-01-15';
+9. SELECT * FROM Projects WHERE Status = 'Completed' OR StartDate < '2025-01-01';
+10. SELECT * FROM ClubMembers WHERE (SkillLevel = 'Beginner' OR SkillLevel = 'Intermediate') AND MemberID > 2;
